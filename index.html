@@ -2,10 +2,22 @@
 <html lang="en-US">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
     <style>
 
+:root {
+ --bg: rgb(43, 42, 51);
+ --bg-key: #818384;
+ --text: rgb(210, 211, 212);
+ --letter-full-match: #538d4e;
+ --letter-partial-match: #CC7722;
+ --letter-no-match: #60100B;
+}
+
+
 .all {
+  font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
@@ -13,6 +25,19 @@
   display: flex;
   flex-direction: column;
   visibility: hidden;
+}
+
+.dark-mode {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.board-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  overflow: hidden;
 }
 
 .board {
@@ -29,21 +54,21 @@
 
 .key {
   font-family: inherit;
-font-weight: bold;
-border: 0;
-padding: 0;
-margin: 0 6px 0 0;
-height: 58px;
-border-radius: 4px;
-cursor: pointer;
-user-select: none;
-#background-color: var(--key-bg);
-#color: var(--key-text-color);
-flex: 1;
-display: flex;
-justify-content: center;
-align-items: center;
-text-transform: uppercase;
+  font-weight: bold;
+  border:0;
+  padding: 0;
+  margin: 0 6px 0 0;
+  height: 58px;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  background-color: var(--bg-key);
+  color: var(--text);
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
 }
 
 .row {
@@ -60,22 +85,19 @@ touch-action: manipulation;
 }
 
 .tile {
-  font-size: 1em;
-  line-height: 1em;
+  font-size: 1.5em;
   width: 100%;
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  line-height: 2rem;
   font-weight: bold;
   vertical-align: middle;
   box-sizing: border-box;
-  #color: var(--tile-text-color);
   text-transform: uppercase;
   user-select: none;
-  border:1px solid black;
-  height: 1.5em;
-  max-width: 1.5em;
+  border:1px solid rgb(128,128,128);
+  height: 1.6em;
+  width: 1.6em;
 }
     </style>
 
@@ -123,12 +145,12 @@ function wordEntered(word) {
   } else {
     for (let i = 0; i < COLUMNS; ++i) {
       if (gWord.indexOf(word[i]) == -1) {
-        document.getElementById(`key_${word[i]}`).style.backgroundColor = "#FA8072";
-        document.getElementById(`tile_${gRow}_${i}`).style.backgroundColor = "#FA8072";
+        document.getElementById(`key_${word[i]}`).style.backgroundColor = "var(--letter-no-match)";
+        document.getElementById(`tile_${gRow}_${i}`).style.backgroundColor = "var(--letter-no-match)";
       } else if (gWord[i] == word[i]) {
-        document.getElementById(`tile_${gRow}_${i}`).style.backgroundColor = "#466D1D";
+        document.getElementById(`tile_${gRow}_${i}`).style.backgroundColor = "var(--letter-full-match)";
       } else {
-        document.getElementById(`tile_${gRow}_${i}`).style.backgroundColor = "#FCAE1E";
+        document.getElementById(`tile_${gRow}_${i}`).style.backgroundColor = "var(--letter-partial-match)";
       }
     }
     return true;
@@ -181,32 +203,34 @@ window.addEventListener('DOMContentLoaded', (e) => {
      </noscript>
 
   </head>
-  <body>
+  <body class="dark-mode">
 
     <div class="all" id="all">
-      <div class="board" style="width:182px;">
-        <div id="row0" class="row">
-          <div id="tile_0_0" class="tile"></div> <div id="tile_0_1" class="tile"></div> <div id="tile_0_2" class="tile"></div> <div id="tile_0_3" class="tile"></div> <div id="tile_0_4" class="tile"></div>
-        </div>
+      <div class="board-container">
+        <div class="board" style="width:230px;">
+          <div id="row0" class="row">
+            <div id="tile_0_0" class="tile"></div> <div id="tile_0_1" class="tile"></div> <div id="tile_0_2" class="tile"></div> <div id="tile_0_3" class="tile"></div> <div id="tile_0_4" class="tile"></div>
+          </div>
 
-        <div id="row1" class="row">
-          <div id="tile_1_0" class="tile"></div> <div id="tile_1_1" class="tile"></div> <div id="tile_1_2" class="tile"></div> <div id="tile_1_3" class="tile"></div> <div id="tile_1_4" class="tile"></div>
-        </div>
+          <div id="row1" class="row">
+            <div id="tile_1_0" class="tile"></div> <div id="tile_1_1" class="tile"></div> <div id="tile_1_2" class="tile"></div> <div id="tile_1_3" class="tile"></div> <div id="tile_1_4" class="tile"></div>
+          </div>
 
-        <div id="row2" class="row">
-          <div id="tile_2_0" class="tile"></div> <div id="tile_2_1" class="tile"></div> <div id="tile_2_2" class="tile"></div> <div id="tile_2_3" class="tile"></div> <div id="tile_2_4" class="tile"></div>
-        </div>
+          <div id="row2" class="row">
+            <div id="tile_2_0" class="tile"></div> <div id="tile_2_1" class="tile"></div> <div id="tile_2_2" class="tile"></div> <div id="tile_2_3" class="tile"></div> <div id="tile_2_4" class="tile"></div>
+          </div>
 
-        <div id="row3" class="row">
-          <div id="tile_3_0" class="tile"></div> <div id="tile_3_1" class="tile"></div> <div id="tile_3_2" class="tile"></div> <div id="tile_3_3" class="tile"></div> <div id="tile_3_4" class="tile"></div>
-        </div>
+          <div id="row3" class="row">
+            <div id="tile_3_0" class="tile"></div> <div id="tile_3_1" class="tile"></div> <div id="tile_3_2" class="tile"></div> <div id="tile_3_3" class="tile"></div> <div id="tile_3_4" class="tile"></div>
+          </div>
 
-        <div id="row4" class="row">
-          <div id="tile_4_0" class="tile"></div> <div id="tile_4_1" class="tile"></div> <div id="tile_4_2" class="tile"></div> <div id="tile_4_3" class="tile"></div> <div id="tile_4_4" class="tile"></div>
-        </div>
+          <div id="row4" class="row">
+            <div id="tile_4_0" class="tile"></div> <div id="tile_4_1" class="tile"></div> <div id="tile_4_2" class="tile"></div> <div id="tile_4_3" class="tile"></div> <div id="tile_4_4" class="tile"></div>
+          </div>
 
-        <div id="row5" class="row">
-          <div id="tile_5_0" class="tile"></div> <div id="tile_5_1" class="tile"></div> <div id="tile_5_2" class="tile"></div> <div id="tile_5_3" class="tile"></div> <div id="tile_5_4" class="tile"></div>
+          <div id="row5" class="row">
+            <div id="tile_5_0" class="tile"></div> <div id="tile_5_1" class="tile"></div> <div id="tile_5_2" class="tile"></div> <div id="tile_5_3" class="tile"></div> <div id="tile_5_4" class="tile"></div>
+          </div>
         </div>
       </div>
 
