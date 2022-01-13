@@ -69,6 +69,7 @@
   justify-content: center;
   align-items: center;
   text-transform: uppercase;
+  max-width: 3.5em;
 }
 
 .row {
@@ -80,8 +81,14 @@
 .keyboardrow {
     display: flex;
     width: 100%;
-margin: 0 auto 8px;
-touch-action: manipulation;
+    margin: 0 auto 8px;
+    touch-action: manipulation;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  overflow: hidden;
 }
 
 .tile {
@@ -172,7 +179,7 @@ function click(button) {
         }
       }
     }
-  } else if (button.innerHTML == "delete") {
+  } else if (button.innerHTML == "del") {
     if (gColumn > 0) {
       --gColumn;
       document.getElementById(`tile_${gRow}_${gColumn}`).innerHTML = "";
@@ -236,40 +243,40 @@ window.addEventListener('DOMContentLoaded', (e) => {
 
       <div class="keyboard">
         <div class="keyboardrow">
-          <button id="key_a" class="key">a</button>
-          <button id="key_b" class="key">b</button>
-          <button id="key_c" class="key">c</button>
-          <button id="key_d" class="key">d</button>
+          <button id="key_q" class="key">q</button>
+          <button id="key_w" class="key">w</button>
           <button id="key_e" class="key">e</button>
+          <button id="key_r" class="key">r</button>
+          <button id="key_t" class="key">t</button>
+          <button id="key_y" class="key">y</button>
+          <button id="key_u" class="key">u</button>
+          <button id="key_i" class="key">i</button>
+          <button id="key_o" class="key">o</button>
+          <button id="key_p" class="key">p</button>
+        </div>
+
+        <div class="keyboardrow">
+          <button id="key_a" class="key">a</button>
+          <button id="key_s" class="key">s</button>
+          <button id="key_d" class="key">d</button>
           <button id="key_f" class="key">f</button>
           <button id="key_g" class="key">g</button>
           <button id="key_h" class="key">h</button>
-          <button id="key_i" class="key">i</button>
           <button id="key_j" class="key">j</button>
-        </div>
-
-        <div class="keyboardrow">
           <button id="key_k" class="key">k</button>
           <button id="key_l" class="key">l</button>
-          <button id="key_m" class="key">m</button>
-          <button id="key_n" class="key">n</button>
-          <button id="key_o" class="key">o</button>
-          <button id="key_p" class="key">p</button>
-          <button id="key_q" class="key">q</button>
-          <button id="key_r" class="key">r</button>
-          <button id="key_s" class="key">s</button>
-          <button id="key_t" class="key">t</button>
+          <button id="key_enter" class="key">enter</button>
         </div>
 
         <div class="keyboardrow">
-          <button id="key_u" class="key">u</button>
-          <button id="key_v" class="key">v</button>
-          <button id="key_w" class="key">w</button>
-          <button id="key_x" class="key">x</button>
-          <button id="key_y" class="key">y</button>
           <button id="key_z" class="key">z</button>
-          <button id="key_enter" class="key">enter</button>
-          <button id="key_delete" class="key">delete</button>
+          <button id="key_x" class="key">x</button>
+          <button id="key_c" class="key">c</button>
+          <button id="key_v" class="key">v</button>
+          <button id="key_b" class="key">b</button>
+          <button id="key_n" class="key">n</button>
+          <button id="key_m" class="key">m</button>
+          <button id="key_del" class="key">del</button>
         </div>
       </div>
 
