@@ -1,4 +1,4 @@
-export var nl_easy = [
+export var words = [
 "heeft",
 "alles",
 "laten",

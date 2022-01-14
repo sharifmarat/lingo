@@ -1,18 +1,19 @@
 import { toast } from './toast.js';
-import { nl_easy } from './nl-easy-5.js';
-import { nl_all } from './nl-all-5.js';
 
+let easy_words=[];
+let all_words=[];
 let gWord="";
 let gRow = 0;
 let gColumn = 0;
 let gLosses = 0;
 let gWins = 0;
 let gHideToast = null;
+const LANGUAGES = {"nl":true, "en":true, "ru":false};
 const ROWS = 6;
 const COLUMNS = 5;
 
 function genRandomWord() {
-  return nl_easy[Math.floor(Math.random()*nl_easy.length)];
+  return easy_words[Math.floor(Math.random()*easy_words.length)];
 }
 
 function start() {
@@ -78,7 +79,7 @@ function wordInRow(row) {
 }
 
 function wordEntered(word) {
-  if (!nl_all[word]) {
+  if (!all_words[word]) {
     showMessage('Non existing word');
     return false;
   }
@@ -164,7 +165,7 @@ function restart() {
 
 window.addEventListener('resize', windowResize);
 
-window.addEventListener('DOMContentLoaded', (e) => {
+function initialize() {
   windowResize();
 
   window.addEventListener("keydown", (e) => {
@@ -200,4 +201,30 @@ window.addEventListener('DOMContentLoaded', (e) => {
   reset();
   start();
   document.getElementById("all").style.visibility = 'visible';
+}
+
+window.addEventListener('DOMContentLoaded', (e) => {
+  const params = new URLSearchParams(window.location.search);
+
+  let lang = params.get('lang');
+  if (!lang) {
+    lang = "nl"; //default language
+  }
+
+  if (!LANGUAGES[lang]) {
+    showMessage(`Unsupported language`);
+    return;
+  }
+
+  import(`./${lang}/easy-5.js`)
+    .then((module_easy) => {
+      easy_words = module_easy.words;
+      import(`./${lang}/all-5.js`)
+        .then((module_all) => {
+          all_words = module_all.words;
+          initialize();
+        })
+        .catch(err => showMessage("Error when loading dictionaries"));
+    })
+    .catch(err => showMessage("Error when loading dictionaries"));
 });
