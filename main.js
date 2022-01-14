@@ -1,3 +1,4 @@
+import { toast } from './toast.js';
 import { nl_easy } from './nl-easy-5.js';
 import { nl_all } from './nl-all-5.js';
 
@@ -6,6 +7,7 @@ let gRow = 0;
 let gColumn = 0;
 let gLosses = 0;
 let gWins = 0;
+let gHideToast = null;
 const ROWS = 6;
 const COLUMNS = 5;
 
@@ -100,7 +102,7 @@ function wordEntered(word) {
 }
 
 function showMessage(msg) {
-  alert(msg);
+  gHideToast = toast.toast(msg);
 }
 
 function click(button) {
@@ -111,6 +113,10 @@ function click(button) {
 
   if (gWord == "") {
     return;
+  }
+
+  if (gHideToast) {
+    gHideToast.hide();
   }
 
   if (button.innerHTML == "enter") {
