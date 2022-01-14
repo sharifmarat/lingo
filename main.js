@@ -15,7 +15,6 @@ function genRandomWord() {
 
 function start() {
   gWord = genRandomWord();
-  console.log(gWord);
 }
 
 function reset() {
@@ -36,7 +35,8 @@ function reset() {
     }
   }
 
-  document.getElementById("keyboard").style.visibility = 'visible';
+  document.getElementById("keyboard").style.display = 'block';
+  document.getElementById("endgamerow").style.display = 'none';
 }
 
 function renderStats() {
@@ -60,7 +60,10 @@ function finishGame(won) {
   }));
 
   // disable keyboard
-  document.getElementById("keyboard").style.visibility = 'hidden';
+  document.getElementById("keyboard").style.display = 'none';
+  document.getElementById("endgamerow").style.display = 'flex';
+
+  gWord = "";
 }
 
 function wordInRow(row) {
@@ -73,7 +76,7 @@ function wordInRow(row) {
 
 function wordEntered(word) {
   if (!nl_all[word]) {
-    alert('Non existing word');
+    showMessage('Non existing word');
     return false;
   }
 
@@ -89,24 +92,37 @@ function wordEntered(word) {
   }
 
   if (word == gWord) {
-    alert('YOU WON!!!');
+    showMessage('YOU WON!!!');
     finishGame(true);
     return false;
   }
   return true;
 }
 
+function showMessage(msg) {
+  alert(msg);
+}
+
 function click(button) {
+  if (button.innerHTML == "restart") {
+    restart();
+    return;
+  }
+
+  if (gWord == "") {
+    return;
+  }
+
   if (button.innerHTML == "enter") {
     if (gColumn < COLUMNS) {
-      alert("Word is too short");
+      showMessage("Word is too short");
     } else {
       let word = wordInRow(gRow);
       if (wordEntered(word)) {
         gColumn = 0;
         ++gRow;
         if (gRow == ROWS) {
-          alert(`You lost. The word was: ${gWord}`);
+          showMessage(`You lost. The word was: ${gWord}`);
           finishGame(false);
         }
       }
@@ -124,7 +140,32 @@ function click(button) {
   }
 }
 
+function windowResize() {
+  let vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
+function restart() {
+  reset();
+  start();
+}
+
+window.addEventListener('resize', windowResize);
+
 window.addEventListener('DOMContentLoaded', (e) => {
+  windowResize();
+
+  window.addEventListener("keydown", (e) => {
+    let id = `key_${e.key.toLowerCase()}`;
+    if (e.key == "Backspace" || e.key == "Delete") {
+      id = "key_del";
+    }
+    let button = document.getElementById(id);
+    if (button) {
+      click(button);
+    }
+  });
+
   let buttons = document.getElementsByClassName('key');
   for (let b of buttons) {
     b.onclick = function() {
