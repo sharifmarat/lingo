@@ -100,7 +100,7 @@ export const toast = (() => {
 		},
 
 		settings: {
-			duration: 2000,
+			duration: 0,
 		},
 	};
 

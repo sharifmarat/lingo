@@ -23,6 +23,7 @@ function reset() {
   gWord="";
   gRow = 0;
   gColumn = 0;
+  hideMessage();
 
   let tiles = document.getElementsByClassName('tile');
   for (let t of tiles) {
@@ -105,6 +106,12 @@ function showMessage(msg) {
   gHideToast = toast.toast(msg);
 }
 
+function hideMessage() {
+  if (gHideToast) {
+    gHideToast.hide();
+  }
+}
+
 function click(button) {
   if (button.innerHTML == "restart") {
     restart();
@@ -115,9 +122,8 @@ function click(button) {
     return;
   }
 
-  if (gHideToast) {
-    gHideToast.hide();
-  }
+  // pressing a button will hide a message
+  hideMessage();
 
   if (button.innerHTML == "enter") {
     if (gColumn < COLUMNS) {
