@@ -1,4 +1,4 @@
-var nl_easy = [
+export var nl_easy = [
 "heeft",
 "alles",
 "laten",

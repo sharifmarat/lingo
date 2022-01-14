@@ -1,0 +1,110 @@
+:root {
+ color-scheme: dark;
+ --bg: rgb(43, 42, 51);
+ --bg-key: #818384;
+ --text: rgb(210, 211, 212);
+ --letter-full-match: #538d4e;
+ --letter-partial-match: #CC7722;
+ --letter-no-match: #60100B;
+ --key-enter: #3944BC
+}
+
+.dark-mode {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.all {
+  font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  height: 95vh;
+  display: flex;
+  flex-direction: column;
+  visibility: hidden;
+}
+
+.header {
+  font-size: min(7vh, 1.8rem);
+  height: min(8vh, 1.9em);
+  flex-direction: row;
+}
+
+.board-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  flex-grow: 1;
+  max-height: 500px;
+}
+
+.board {
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  grid-gap: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.row {
+    display: block;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 5px;
+}
+
+.tile {
+  font-size: min(7vh, 1.8rem);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  vertical-align: middle;
+  box-sizing: border-box;
+  text-transform: uppercase;
+  user-select: none;
+  border:1px solid rgb(128,128,128);
+  height: min(8vh, 1.9em);
+  width: min(8vh, 1.9em);
+}
+
+.keyboard-container {
+  margin-top: auto;
+}
+
+.keyboard {
+  user-select: none;
+}
+
+.keyboardrow {
+  display: flex;
+  margin: 0 auto 8px;
+  touch-action: manipulation;
+  justify-content: center;
+  align-items: center;
+}
+
+.key {
+  font-family: inherit;
+  font-weight: bold;
+  border:0;
+  padding: 0;
+  margin: 0 3px 0 0;
+  height: min(8vh, 3.5em);
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  background-color: var(--bg-key);
+  color: var(--text);
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  max-width: 3.5em;
+}
+
+.key-enter {
+  background-color: var(--key-enter);
+}

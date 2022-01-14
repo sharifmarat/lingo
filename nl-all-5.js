@@ -1,4 +1,4 @@
-var nl_all = {
+export var nl_all = {
 "allah":true,
 "amati":true,
 "aruba":true,

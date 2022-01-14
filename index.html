@@ -2,219 +2,26 @@
 <html lang="en-US">
   <head>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="dark">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title>Guess Word</title>
 
-    <style>
-
-:root {
- --bg: rgb(43, 42, 51);
- --bg-key: #818384;
- --text: rgb(210, 211, 212);
- --letter-full-match: #538d4e;
- --letter-partial-match: #CC7722;
- --letter-no-match: #60100B;
-}
-
-
-.all {
-  font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  visibility: hidden;
-}
-
-.dark-mode {
-  background-color: var(--bg);
-  color: var(--text);
-}
-
-.board-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-  overflow: hidden;
-}
-
-.board {
-  display: grid;
-  grid-template-rows: repeat(6, 1fr);
-  grid-gap: 5px;
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-.keyboard {
-  height: 200px;
-}
-
-.key {
-  font-family: inherit;
-  font-weight: bold;
-  border:0;
-  padding: 0;
-  margin: 0 6px 0 0;
-  height: 58px;
-  border-radius: 4px;
-  cursor: pointer;
-  user-select: none;
-  background-color: var(--bg-key);
-  color: var(--text);
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-transform: uppercase;
-  max-width: 3.5em;
-}
-
-.row {
-    display: flex;
-    grid-template-columns: repeat(5, 1fr);
-    grid-gap: 5px;
-}
-
-.keyboardrow {
-    display: flex;
-    width: 100%;
-    margin: 0 auto 8px;
-    touch-action: manipulation;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-  overflow: hidden;
-}
-
-.tile {
-  font-size: 1.5em;
-  width: 100%;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-  vertical-align: middle;
-  box-sizing: border-box;
-  text-transform: uppercase;
-  user-select: none;
-  border:1px solid rgb(128,128,128);
-  height: 1.6em;
-  width: 1.6em;
-}
-    </style>
-
-    <script type="text/javascript" src="nl-all-5.js"></script>
-    <script type="text/javascript" src="nl-easy-5.js"></script>
-     <script>
-let gWord="";
-let gRow = 0;
-let gColumn = 0;
-const ROWS = 6;
-const COLUMNS = 5;
-
-function genRandomWord() {
-  return nl_easy[Math.floor(Math.random()*nl_easy.length)];
-}
-
-function start() {
-  gWord = genRandomWord();
-  console.log(gWord);
-}
-
-function reset() {
-}
-
-function stopGame() {
-}
-
-function wordInRow(row) {
-    let word = "";
-    for (let c = 0; c < COLUMNS; ++c) {
-      word += document.getElementById(`tile_${row}_${c}`).innerHTML;
-    }
-    return word;
-}
-
-function wordEntered(word) {
-  console.log(`checking ${word}`);
-  if (word == gWord) {
-    alert('YOU WON!!!');
-    stopGame();
-    return false;
-  } else if (!nl_all[word]) {
-    alert('Non existing word');
-    return false;
-  } else {
-    for (let i = 0; i < COLUMNS; ++i) {
-      if (gWord.indexOf(word[i]) == -1) {
-        document.getElementById(`key_${word[i]}`).style.backgroundColor = "var(--letter-no-match)";
-        document.getElementById(`tile_${gRow}_${i}`).style.backgroundColor = "var(--letter-no-match)";
-      } else if (gWord[i] == word[i]) {
-        document.getElementById(`tile_${gRow}_${i}`).style.backgroundColor = "var(--letter-full-match)";
-      } else {
-        document.getElementById(`tile_${gRow}_${i}`).style.backgroundColor = "var(--letter-partial-match)";
-      }
-    }
-    return true;
-  }
-}
-
-function click(button) {
-  if (button.innerHTML == "enter") {
-    if (gColumn < COLUMNS) {
-      alert("Word is too short");
-    } else {
-      let word = wordInRow(gRow);
-      if (wordEntered(word)) {
-        gColumn = 0;
-        ++gRow;
-        if (gRow == ROWS) {
-          alert(`You lost. The word was: ${gWord}`);
-          stopGame();
-        }
-      }
-    }
-  } else if (button.innerHTML == "del") {
-    if (gColumn > 0) {
-      --gColumn;
-      document.getElementById(`tile_${gRow}_${gColumn}`).innerHTML = "";
-    }
-  } else if (gColumn < COLUMNS) {
-    let tile_id = `tile_${gRow}_${gColumn}`;
-    let tile = document.getElementById(tile_id);
-    tile.innerHTML = button.innerHTML;
-    ++gColumn;
-  }
-}
-
-window.addEventListener('DOMContentLoaded', (e) => {
-  let buttons = document.getElementsByClassName('key');
-  for (let b of buttons) {
-    b.onclick = function() {
-      click(b);
-    }
-  }
-
-  reset();
-  start();
-  document.getElementById("all").style.visibility = 'visible';
-});
-     </script>
-     <noscript>
-       Enable javascript to play.
-     </noscript>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="main.js"></script>
+    <noscript>Enable javascript to play.</noscript>
 
   </head>
   <body class="dark-mode">
 
     <div class="all" id="all">
+
+      <div class="header">
+        <label>W: </label><label id="wins">0</label>
+        <label>L: </label><label id="losses">0</label>
+      </div>
+
       <div class="board-container">
-        <div class="board" style="width:230px;">
+        <div class="board" >
           <div id="row0" class="row">
             <div id="tile_0_0" class="tile"></div> <div id="tile_0_1" class="tile"></div> <div id="tile_0_2" class="tile"></div> <div id="tile_0_3" class="tile"></div> <div id="tile_0_4" class="tile"></div>
           </div>
@@ -241,42 +48,44 @@ window.addEventListener('DOMContentLoaded', (e) => {
         </div>
       </div>
 
-      <div class="keyboard">
-        <div class="keyboardrow">
-          <button id="key_q" class="key">q</button>
-          <button id="key_w" class="key">w</button>
-          <button id="key_e" class="key">e</button>
-          <button id="key_r" class="key">r</button>
-          <button id="key_t" class="key">t</button>
-          <button id="key_y" class="key">y</button>
-          <button id="key_u" class="key">u</button>
-          <button id="key_i" class="key">i</button>
-          <button id="key_o" class="key">o</button>
-          <button id="key_p" class="key">p</button>
-        </div>
+      <div class="keyboard-container">
+        <div class="keyboard" id="keyboard">
+          <div class="keyboardrow">
+            <button id="key_q" class="key">q</button>
+            <button id="key_w" class="key">w</button>
+            <button id="key_e" class="key">e</button>
+            <button id="key_r" class="key">r</button>
+            <button id="key_t" class="key">t</button>
+            <button id="key_y" class="key">y</button>
+            <button id="key_u" class="key">u</button>
+            <button id="key_i" class="key">i</button>
+            <button id="key_o" class="key">o</button>
+            <button id="key_p" class="key">p</button>
+          </div>
 
-        <div class="keyboardrow">
-          <button id="key_a" class="key">a</button>
-          <button id="key_s" class="key">s</button>
-          <button id="key_d" class="key">d</button>
-          <button id="key_f" class="key">f</button>
-          <button id="key_g" class="key">g</button>
-          <button id="key_h" class="key">h</button>
-          <button id="key_j" class="key">j</button>
-          <button id="key_k" class="key">k</button>
-          <button id="key_l" class="key">l</button>
-          <button id="key_enter" class="key">enter</button>
-        </div>
+          <div class="keyboardrow">
+            <button id="key_a" class="key">a</button>
+            <button id="key_s" class="key">s</button>
+            <button id="key_d" class="key">d</button>
+            <button id="key_f" class="key">f</button>
+            <button id="key_g" class="key">g</button>
+            <button id="key_h" class="key">h</button>
+            <button id="key_j" class="key">j</button>
+            <button id="key_k" class="key">k</button>
+            <button id="key_l" class="key">l</button>
+            <button id="key_del" class="key">del</button>
+          </div>
 
-        <div class="keyboardrow">
-          <button id="key_z" class="key">z</button>
-          <button id="key_x" class="key">x</button>
-          <button id="key_c" class="key">c</button>
-          <button id="key_v" class="key">v</button>
-          <button id="key_b" class="key">b</button>
-          <button id="key_n" class="key">n</button>
-          <button id="key_m" class="key">m</button>
-          <button id="key_del" class="key">del</button>
+          <div class="keyboardrow">
+            <button id="key_z" class="key">z</button>
+            <button id="key_x" class="key">x</button>
+            <button id="key_c" class="key">c</button>
+            <button id="key_v" class="key">v</button>
+            <button id="key_b" class="key">b</button>
+            <button id="key_n" class="key">n</button>
+            <button id="key_m" class="key">m</button>
+            <button id="key_enter" class="key key-enter">enter</button>
+          </div>
         </div>
       </div>
 
