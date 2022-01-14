@@ -165,7 +165,7 @@ function restart() {
 
 window.addEventListener('resize', windowResize);
 
-function initialize() {
+function initialize(lang) {
   windowResize();
 
   window.addEventListener("keydown", (e) => {
@@ -198,6 +198,17 @@ function initialize() {
   }
   renderStats();
 
+  let settings = document.getElementById("settings-button");
+  settings.innerHTML = lang;
+  settings.onclick = function() {
+    const languageSelection = `<a href="?lang=en" class="settings-button">English</a><br/>
+                               <a href="?lang=nl" class="settings-button">Nederlands</a><br/>
+                               TODO: Русский<br/>`;
+    let div = document.createElement('div');
+    div.innerHTML = languageSelection;
+    showMessage(div);
+  }
+
   reset();
   start();
   document.getElementById("all").style.visibility = 'visible';
@@ -222,7 +233,7 @@ window.addEventListener('DOMContentLoaded', (e) => {
       import(`./${lang}/all-5.js`)
         .then((module_all) => {
           all_words = module_all.words;
-          initialize();
+          initialize(lang);
         })
         .catch(err => showMessage("Error when loading dictionaries"));
     })

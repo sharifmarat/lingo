@@ -28,7 +28,41 @@
 .header {
   font-size: min(7vh, 1.8rem);
   height: min(8vh, 1.9em);
+  display: flex;
   flex-direction: row;
+  justify-content: space-between;
+}
+
+.header-button {
+  font-family: inherit;
+  font-weight: bold;
+  border:0;
+  padding: 0;
+  margin: 0 3px 0 0;
+  height: 4.0em;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  background-color: var(--bg-key);
+  color: var(--text);
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  max-width: 3.0em;
+}
+
+.settings-button {
+  display: block;
+  font-family: inherit;
+  margin-left: auto;
+  margin-right: auto;
+  cursor: pointer;
+  user-select: none;
+  background-color: var(--bg-key);
+  color: var(--text);
+  max-width: 15em;
 }
 
 .board-container {
