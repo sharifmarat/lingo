@@ -1,8 +1,6 @@
 # Guess a word
 
-Insipred by bulls and cows, Lingo and wordle.
-
-The first version is in Dutch:
+Insipred by bulls and cows, Lingo and wordle. Supports English and Dutch dictionaries.
 
 ![lingo-nl](misc/lingo-nl.png)
 
@@ -19,7 +17,5 @@ You can play the Dutch version of the game here: https://ifnull.org/wordnl/
 
 
 **TODO**:
-- implement dynamic loading
-- add English
-- add Russian
+- add Russian (different keyboard)
 - add local storage for the current state (restore on page refresh)
