@@ -1,8 +1,12 @@
 # Guess a word
 
-Insipred by bulls and cows, Lingo and wordle. Supports English and Dutch dictionaries.
+Insipred by bulls and cows, Lingo and wordle.
 
 ![lingo-nl](misc/lingo-nl.png)
+
+Supports English and Dutch dictionaries:
+- [English](https://sharifmarat.github.io/lingo/?lang=en)
+- [Dutch](https://sharifmarat.github.io/lingo/?lang=nl)
 
 # Rules
 
@@ -11,10 +15,9 @@ Guess a 5 letter word. After entering a word you get a feedback for each letter:
 - partial match if letter is at the different place
 - no match if letter does not exist
 
-# Example
+# Outside github pages
 
-You can play the Dutch version of the game here: https://ifnull.org/wordnl/
-
+It is also hosted outside of github pages: https://ifnull.org/wordnl/
 
 **TODO**:
 - add Russian (different keyboard)
