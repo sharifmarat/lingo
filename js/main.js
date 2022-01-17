@@ -9,6 +9,7 @@ let gLosses = 0;
 let gWins = 0;
 let gHideToast = null;
 let gLang = null;
+let gKeyMatches = {} // 'k' -> "partial" or "full"
 const LANGUAGES = {"nl":true, "en":true, "ru":true};
 const ROWS = 6;
 const COLUMNS = 5;
@@ -67,6 +68,7 @@ function reset() {
   gWord="";
   gRow = 0;
   gColumn = 0;
+  gKeyMatches = {};
   hideMessage();
 
   let tiles = document.getElementsByClassName('tile');
@@ -121,8 +123,33 @@ function wordInRow(row) {
     return word;
 }
 
+function lightUpKey(letter, rowId, columnId, match) {
+  if (match == "full") {
+    document.getElementById(`tile_${rowId}_${columnId}`).style.backgroundColor = "var(--letter-full-match)";
+    if (gKeyMatches[letter] != "full") {
+      document.getElementById(`key_${letter}`).style.backgroundColor = "var(--letter-full-match)";
+      gKeyMatches[letter] = "full";
+    }
+  } else if (match == "partial") {
+    document.getElementById(`tile_${rowId}_${columnId}`).style.backgroundColor = "var(--letter-partial-match)";
+    if (gKeyMatches[letter] != "full" && gKeyMatches[letter] != "partial") {
+      // do not downgrade from full match to partial
+      document.getElementById(`key_${letter}`).style.backgroundColor = "var(--letter-partial-match)";
+      gKeyMatches[letter] = "partial";
+    }
+  } else if (match == "no") {
+    document.getElementById(`tile_${rowId}_${columnId}`).style.backgroundColor = "var(--letter-no-match)";
+    if (gKeyMatches[letter] != "full" && gKeyMatches[letter] != "partial") {
+      // do not downgrade from full or partial match
+      document.getElementById(`key_${letter}`).style.backgroundColor = "var(--letter-no-match)";
+    }
+  } else {
+    showMessage("Internal error :(");
+  }
+}
+
 function wordEntered(word) {
-  if (!all_words[word]) {
+  if (!all_words[word] /*&& location.hostname !== "localhost"*/) {
     showMessage(localize(MSG_UNKNOWN_WORD, gLang));
     return false;
   }
@@ -138,7 +165,7 @@ function wordEntered(word) {
   for (let i = 0; i < COLUMNS; ++i) {
     if (gWord[i] == word[i]) {
       isUsed[i] = true;
-      document.getElementById(`tile_${gRow}_${i}`).style.backgroundColor = "var(--letter-full-match)";
+      lightUpKey(word[i], gRow, i, "full");
     }
   }
 
@@ -159,10 +186,9 @@ function wordEntered(word) {
     }
 
     if (isPartialMatch) {
-      document.getElementById(`tile_${gRow}_${i}`).style.backgroundColor = "var(--letter-partial-match)";
+      lightUpKey(word[i], gRow, i, "partial");
     } else {
-      document.getElementById(`key_${word[i]}`).style.backgroundColor = "var(--letter-no-match)";
-      document.getElementById(`tile_${gRow}_${i}`).style.backgroundColor = "var(--letter-no-match)";
+      lightUpKey(word[i], gRow, i, "no");
     }
   }
 
