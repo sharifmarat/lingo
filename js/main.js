@@ -57,6 +57,10 @@ function genRandomWord() {
 
 function start() {
   gWord = genRandomWord();
+  if (location.hostname === "localhost") {
+    // useful for debugging
+    console.log(gWord);
+  }
 }
 
 function reset() {
@@ -123,14 +127,42 @@ function wordEntered(word) {
     return false;
   }
 
+  // If true, the letter from the gWord has been already matched.
+  // If `gWord` is "sleep"
+  // and `word` is "xeexe",
+  // then the first "e" is partial match, second "e" is full match and the last "e" is no match.
+  // `isUsed` array is used to track already matched letters.
+  let isUsed = [false, false, false, false, false];
+
+  // First match green letters
   for (let i = 0; i < COLUMNS; ++i) {
-    if (gWord.indexOf(word[i]) == -1) {
+    if (gWord[i] == word[i]) {
+      isUsed[i] = true;
+      document.getElementById(`tile_${gRow}_${i}`).style.backgroundColor = "var(--letter-full-match)";
+    }
+  }
+
+  // Second, match partial matches or no matches.
+  for (let i = 0; i < COLUMNS; ++i) {
+    if (gWord[i] == word[i]) {
+      // skip full matches.
+      continue;
+    }
+
+    let isPartialMatch = false;
+    for (let j = 0; j < COLUMNS; ++j) {
+      if (word[i] == gWord[j] && !isUsed[j]) {
+        isPartialMatch = true;
+        isUsed[j] = true;
+        break;
+      }
+    }
+
+    if (isPartialMatch) {
+      document.getElementById(`tile_${gRow}_${i}`).style.backgroundColor = "var(--letter-partial-match)";
+    } else {
       document.getElementById(`key_${word[i]}`).style.backgroundColor = "var(--letter-no-match)";
       document.getElementById(`tile_${gRow}_${i}`).style.backgroundColor = "var(--letter-no-match)";
-    } else if (gWord[i] == word[i]) {
-      document.getElementById(`tile_${gRow}_${i}`).style.backgroundColor = "var(--letter-full-match)";
-    } else {
-      document.getElementById(`tile_${gRow}_${i}`).style.backgroundColor = "var(--letter-partial-match)";
     }
   }
 
