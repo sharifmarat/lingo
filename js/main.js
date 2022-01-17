@@ -8,7 +8,8 @@ let gColumn = 0;
 let gLosses = 0;
 let gWins = 0;
 let gHideToast = null;
-const LANGUAGES = {"nl":true, "en":true, "ru":false};
+let gLang = null;
+const LANGUAGES = {"nl":true, "en":true, "ru":true};
 const ROWS = 6;
 const COLUMNS = 5;
 
@@ -165,8 +166,52 @@ function restart() {
 
 window.addEventListener('resize', windowResize);
 
+function initializeKeyboard(layout) {
+  let keyboard = document.getElementById("keyboard");
+  for (const l of layout) {
+    let row = document.createElement("div");
+    row.setAttribute("class", "keyboardrow");
+    for (const k of l) {
+      let key = document.createElement("button");
+      if (k == "enter") {
+        key.setAttribute("class", "key key-enter unselectable");
+      } else {
+        key.setAttribute("class", "key unselectable");
+      }
+      key.setAttribute("id", `key_${k}`);
+      key.setAttribute("tabIndex", "-1");
+      key.innerHTML = k;
+      row.appendChild(key);
+    }
+    keyboard.appendChild(row);
+  }
+}
+
+function initializeRussianKeyboard() {
+  initializeKeyboard([
+    ["й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з", "х", "ъ"],
+    ["ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э", "del"],
+    ["я", "ч", "с", "м", "и", "т", "ь", "б", "ю", "enter"]
+  ]);
+}
+
+function initializeQwertyKeyboard() {
+  initializeKeyboard([
+    ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
+    ["a", "s", "d", "f", "g", "h", "j", "k", "l", "del"],
+    ["z", "x", "c", "v", "b", "n", "m", "enter"]
+  ]);
+}
+
 function initialize(lang) {
+  gLang = lang;
   windowResize();
+
+  if (lang == "ru") {
+    initializeRussianKeyboard();
+  } else {
+    initializeQwertyKeyboard();
+  }
 
   window.addEventListener("keydown", (e) => {
     let id = `key_${e.key.toLowerCase()}`;
@@ -203,7 +248,8 @@ function initialize(lang) {
   settings.onclick = function() {
     const languageSelection = `<a href="?lang=en" class="settings-button">English</a><br/>
                                <a href="?lang=nl" class="settings-button">Nederlands</a><br/>
-                               TODO: Русский<br/>`;
+                               <a href="?lang=ru" class="settings-button">Русский</a><br/>
+                              `;
     let div = document.createElement('div');
     div.innerHTML = languageSelection;
     showMessage(div);
