@@ -4,7 +4,7 @@ Insipred by bulls and cows, Lingo and wordle.
 
 ![lingo-nl](misc/lingo-nl.png)
 
-Supports English and Dutch dictionaries. Where to play:
+Supports English, Dutch and Russian dictionaries. Where to play:
 - [English](https://ifnull.org/wordnl/?lang=en)
 - [Dutch](https://ifnull.org/wordnl/?lang=nl)
 - [Same version on GitHub pages](https://sharifmarat.github.io/lingo/?lang=en)
@@ -17,5 +17,4 @@ Guess a 5 letter word. After entering a word you get a feedback for each letter:
 - no match if letter does not exist
 
 **TODO**:
-- add Russian (different keyboard)
 - add local storage for the current state (restore on page refresh)
