@@ -300,6 +300,63 @@ function initializeQwertyKeyboard() {
   ]);
 }
 
+function solve() {
+  let words = all_words;
+  let full_match = "rgb(83, 141, 78)"
+  let partial_match = "rgb(204, 119, 34)"
+  let no_match = "rgb(96, 16, 11)"
+  import(`https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js`).then((jq) => {
+    function checkInRow(word, row) {
+        for (let i = 0; i < 5; ++i) {
+            let tile = $(`#tile_${row}_${i}`)
+            let ch = word.charAt(i);
+            if (tile.css("background-color") == full_match && tile.html() != ch) {
+                return false;
+            }
+            if (tile.css("background-color") == partial_match && tile.html() == ch) {
+                return false;
+            }
+            if (tile.css("background-color") == partial_match && word.indexOf(tile.html()) == -1) {
+                return false;
+            }
+            if ($(`#key_${ch}`).css("background-color") == no_match) {
+                return false;
+            }
+            if (word == wordInRow(row)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function checkWord(word, iteration) {
+        for (let i = 0; i < iteration; i++) {
+            if (!checkInRow(word, i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    for (let iteration = 0; iteration < 6; iteration++) {
+        let wordIndex = 0;
+        let word = "";
+        let val;
+        for([word, val] of Object.entries(words)) {
+          if (checkWord(word, iteration)) {
+            break;
+          }
+        }
+        //let word = words[wordIndex];
+        for (let i = 0; i < word.length; i++) {
+            $("#key_"+word.charAt(i)).click();
+        }
+        $("#key_enter").click();
+    }
+  })
+  .catch(err => alert("Error loading jquery: " + err));
+}
+
 function initialize(lang) {
   gLang = lang;
   windowResize();
@@ -355,6 +412,7 @@ function initialize(lang) {
   // some static localization
   document.getElementById("key_restart").innerHTML = localize(MSG_NEW_GAME, gLang);
 
+  window.solve = solve;
   reset();
   start();
   document.getElementById("all").style.visibility = 'visible';
