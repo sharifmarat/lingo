@@ -10,7 +10,7 @@ let gWins = 0;
 let gHideToast = null;
 let gLang = null;
 let gKeyMatches = {} // 'k' -> "partial" or "full"
-const LANGUAGES = {"nl":true, "en":true, "ru":true};
+const LANGUAGES = {"nl":true, "en":true, "ru":true, "tt":true};
 const ROWS = 6;
 const COLUMNS = 5;
 
@@ -24,27 +24,32 @@ const LOCALIZATIONS = {
   [MSG_NEW_GAME]: {
     "en": "New Game",
     "nl": "Nieuw spel",
-    "ru": "Новая игра"
+    "ru": "Новая игра",
+    "tt": "Новая игра"
   },
   [MSG_VICTORY]: {
     "en": "YOU WON!!!",
     "nl": "JIJ HEBT GEWONNEN!!!",
-    "ru": "ВЫ УГАДАЛИ!!!"
+    "ru": "ВЫ УГАДАЛИ!!!",
+    "tt": "ВЫ УГАДАЛИ!!!"
   },
   [MSG_TOO_SHORT]: {
     "en": "Word is too short",
     "nl": "Woord is te kort",
-    "ru": "Необходимо 5 букв"
+    "ru": "Необходимо 5 букв",
+    "tt": "Необходимо 5 букв"
   },
   [MSG_UNKNOWN_WORD]: {
     "en": "Enter another word",
     "nl": "Voer een ander woord in",
-    "ru": "Введите другое слово"
+    "ru": "Введите другое слово",
+    "tt": "Введите другое слово"
   },
   [MSG_DEFEAT]: {
     "en": "You lost. The word was:",
     "nl": "Jij hebt verloren. Het woord was:",
-    "ru": "Вы не угадали слово:"
+    "ru": "Вы не угадали слово:",
+    "tt": "Вы не угадали слово:"
   }
 };
 
@@ -292,6 +297,14 @@ function initializeRussianKeyboard() {
   ]);
 }
 
+function initializeTatarKeyboard() {
+  initializeKeyboard([
+    ["й", "ө", "у", "к", "е", "н", "г", "ш", "ә", "з", "һ", "ү"],
+    ["ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ң", "х", "ц", "del"],
+    ["я", "ч", "с", "м", "и", "т", "җ", "б", "ю", "ь", "enter"]
+  ]);
+}
+
 function initializeQwertyKeyboard() {
   initializeKeyboard([
     ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
@@ -363,6 +376,8 @@ function initialize(lang) {
 
   if (lang == "ru") {
     initializeRussianKeyboard();
+  } else if (lang == "tt") {
+    initializeTatarKeyboard();
   } else {
     initializeQwertyKeyboard();
   }
@@ -403,6 +418,7 @@ function initialize(lang) {
     const languageSelection = `<a href="?lang=en" class="settings-button">English</a><br/>
                                <a href="?lang=nl" class="settings-button">Nederlands</a><br/>
                                <a href="?lang=ru" class="settings-button">Русский</a><br/>
+                               <a href="?lang=tt" class="settings-button">Татарча</a><br/>
                               `;
     let div = document.createElement('div');
     div.innerHTML = languageSelection;
