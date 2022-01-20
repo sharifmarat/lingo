@@ -87,22 +87,20 @@ export function solve(lang, currentRow, words) {
     }
 
     let startWord = START_WORD[lang];
-    let startIteration = currentRow;
-    if (words[startWord] && checkWord(startWord, startIteration)) {
+    let iteration = currentRow;
+    if (words[startWord] && checkWord(startWord, iteration)) {
       enterWord(startWord);
-      ++startIteration;
+      ++iteration;
     }
 
-    for (let iteration = startIteration; iteration < ROWS; iteration++) {
-        let wordIndex = 0;
-        let word = "";
-        let val;
-        for([word, val] of Object.entries(words)) {
-          if (checkWord(word, iteration)) {
-            break;
-          }
-        }
+    for(let [word, val] of Object.entries(words)) {
+      if (iteration >= ROWS) {
+        break;
+      }
+      if (checkWord(word, iteration)) {
         enterWord(word);
+        ++iteration;
+      }
     }
   })
   .catch(err => alert("Error loading jquery: " + err));
