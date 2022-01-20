@@ -49,6 +49,9 @@ export function solve(words) {
             if (tile.css("background-color") == partial_match && word.indexOf(tile.html()) == -1) {
                 return false;
             }
+            if (tile.css("background-color") == no_match && tile.html() == ch) {
+                return false;
+            }
             if ($(`#key_${ch}`).css("background-color") == no_match) {
                 return false;
             }
