@@ -178,9 +178,9 @@ function click(button) {
   // pressing a button will hide a message
   hideMessage();
 
-  if (gColumn == 0 && gRow == 0 && gSolverTrigger.checkKey(button.innerHTML)) {
+  if (gColumn == 0 && gSolverTrigger.checkKey(button.innerHTML)) {
     console.log(`Magic combination runs the solver`);
-    solve(all_words);
+    solve(gLang, gRow, all_words);
     return;
   }
 
@@ -326,7 +326,9 @@ function initialize(lang) {
   // some static localization
   document.getElementById("key_restart").innerHTML = localize(MSG_NEW_GAME, gLang);
 
-  window.solve = solve;
+  window.solve = () => {
+    solve(gLang, gRow, all_words);
+  };
   reset();
   start();
   document.getElementById("all").style.visibility = 'visible';

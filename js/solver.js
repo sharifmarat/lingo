@@ -2,6 +2,14 @@ let full_match = "rgb(83, 141, 78)"
 let partial_match = "rgb(204, 119, 34)"
 let no_match = "rgb(96, 16, 11)"
 
+// The first word is different per languages
+const START_WORD = {
+  "nl":"eruit",
+  "en":"usage",
+  "ru":"авеню",
+  "tt":"аерту"
+};
+
 // After a certain key combination is typed a solver will be triggered.
 export class CombinationTrigger {
   // Constructs solver with a combination.
@@ -34,7 +42,7 @@ export class CombinationTrigger {
   }
 }
 
-export function solve(words) {
+export function solve(lang, currentRow, words) {
   import(`./jquery-3.6.0.min.js`).then((jq) => {
     function checkInRow(word, row) {
         for (let i = 0; i < COLUMNS; ++i) {
@@ -71,7 +79,21 @@ export function solve(words) {
         return true;
     }
 
-    for (let iteration = 0; iteration < ROWS; iteration++) {
+    function enterWord(word) {
+      for (let i = 0; i < word.length; i++) {
+          $("#key_"+word.charAt(i)).click();
+      }
+      $("#key_enter").click();
+    }
+
+    let startWord = START_WORD[lang];
+    let startIteration = currentRow;
+    if (words[startWord] && checkWord(startWord, startIteration)) {
+      enterWord(startWord);
+      ++startIteration;
+    }
+
+    for (let iteration = startIteration; iteration < ROWS; iteration++) {
         let wordIndex = 0;
         let word = "";
         let val;
@@ -80,10 +102,7 @@ export function solve(words) {
             break;
           }
         }
-        for (let i = 0; i < word.length; i++) {
-            $("#key_"+word.charAt(i)).click();
-        }
-        $("#key_enter").click();
+        enterWord(word);
     }
   })
   .catch(err => alert("Error loading jquery: " + err));
