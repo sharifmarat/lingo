@@ -18,9 +18,15 @@ Guess a 5 letter word. After entering a word you get a feedback for each letter:
 - partial match if letter is at the different place
 - no match if letter does not exist
 
-# Solve
+# Solver
 
-Type `solve()` in browser console to run a simple solver. Thanks to romst.
+There are two ways to trigger the solver:
+- When the field is empty, click 3 times on `DEL`, followed by 3 clicks on `ENTER`.
+- Or execute `solve()` in browser console.
+
+Thanks to romst for the first implementation.
+
 
 **TODO**:
 - add local storage for the current state (restore on page refresh)
+- rewrite in flutter/dart

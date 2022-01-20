@@ -1,4 +1,5 @@
 import { toast } from './toast.js';
+import { solve, CombinationTrigger } from './solver.js';
 
 let easy_words=[];
 let all_words=[];
@@ -10,52 +11,7 @@ let gWins = 0;
 let gHideToast = null;
 let gLang = null;
 let gKeyMatches = {} // 'k' -> "partial" or "full"
-const LANGUAGES = {"nl":true, "en":true, "ru":true, "tt":true};
-const ROWS = 6;
-const COLUMNS = 5;
-
-const MSG_NEW_GAME = "new_game";
-const MSG_VICTORY = "victory";
-const MSG_TOO_SHORT = "too_short";
-const MSG_UNKNOWN_WORD = "unknown_word";
-const MSG_DEFEAT = "defeat";
-
-const LOCALIZATIONS = {
-  [MSG_NEW_GAME]: {
-    "en": "New Game",
-    "nl": "Nieuw spel",
-    "ru": "Новая игра",
-    "tt": "Новая игра"
-  },
-  [MSG_VICTORY]: {
-    "en": "YOU WON!!!",
-    "nl": "JIJ HEBT GEWONNEN!!!",
-    "ru": "ВЫ УГАДАЛИ!!!",
-    "tt": "ВЫ УГАДАЛИ!!!"
-  },
-  [MSG_TOO_SHORT]: {
-    "en": "Word is too short",
-    "nl": "Woord is te kort",
-    "ru": "Необходимо 5 букв",
-    "tt": "Необходимо 5 букв"
-  },
-  [MSG_UNKNOWN_WORD]: {
-    "en": "Enter another word",
-    "nl": "Voer een ander woord in",
-    "ru": "Введите другое слово",
-    "tt": "Введите другое слово"
-  },
-  [MSG_DEFEAT]: {
-    "en": "You lost. The word was:",
-    "nl": "Jij hebt verloren. Het woord was:",
-    "ru": "Вы не угадали слово:",
-    "tt": "Вы не угадали слово:"
-  }
-};
-
-function localize(selector, lang) {
-  return LOCALIZATIONS[selector][lang];
-}
+let gSolverTrigger = new CombinationTrigger(["del", "del", "del", "enter", "enter", "enter"]);
 
 function genRandomWord() {
   return easy_words[Math.floor(Math.random()*easy_words.length)];
@@ -75,6 +31,7 @@ function reset() {
   gColumn = 0;
   gKeyMatches = {};
   hideMessage();
+  gSolverTrigger.reset();
 
   let tiles = document.getElementsByClassName('tile');
   for (let t of tiles) {
@@ -118,14 +75,6 @@ function finishGame(won) {
   document.getElementById("endgamerow").style.display = 'flex';
 
   gWord = "";
-}
-
-function wordInRow(row) {
-    let word = "";
-    for (let c = 0; c < COLUMNS; ++c) {
-      word += document.getElementById(`tile_${row}_${c}`).innerHTML;
-    }
-    return word;
 }
 
 function lightUpKey(letter, rowId, columnId, match) {
@@ -229,6 +178,12 @@ function click(button) {
   // pressing a button will hide a message
   hideMessage();
 
+  if (gColumn == 0 && gRow == 0 && gSolverTrigger.checkKey(button.innerHTML)) {
+    console.log(`Magic combination runs the solver`);
+    solve(all_words);
+    return;
+  }
+
   if (button.innerHTML == "enter") {
     if (gColumn < COLUMNS) {
       showMessage(localize(MSG_TOO_SHORT, gLang));
@@ -311,63 +266,6 @@ function initializeQwertyKeyboard() {
     ["a", "s", "d", "f", "g", "h", "j", "k", "l", "del"],
     ["z", "x", "c", "v", "b", "n", "m", "enter"]
   ]);
-}
-
-function solve() {
-  let words = all_words;
-  let full_match = "rgb(83, 141, 78)"
-  let partial_match = "rgb(204, 119, 34)"
-  let no_match = "rgb(96, 16, 11)"
-  import(`https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js`).then((jq) => {
-    function checkInRow(word, row) {
-        for (let i = 0; i < 5; ++i) {
-            let tile = $(`#tile_${row}_${i}`)
-            let ch = word.charAt(i);
-            if (tile.css("background-color") == full_match && tile.html() != ch) {
-                return false;
-            }
-            if (tile.css("background-color") == partial_match && tile.html() == ch) {
-                return false;
-            }
-            if (tile.css("background-color") == partial_match && word.indexOf(tile.html()) == -1) {
-                return false;
-            }
-            if ($(`#key_${ch}`).css("background-color") == no_match) {
-                return false;
-            }
-            if (word == wordInRow(row)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    function checkWord(word, iteration) {
-        for (let i = 0; i < iteration; i++) {
-            if (!checkInRow(word, i)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    for (let iteration = 0; iteration < 6; iteration++) {
-        let wordIndex = 0;
-        let word = "";
-        let val;
-        for([word, val] of Object.entries(words)) {
-          if (checkWord(word, iteration)) {
-            break;
-          }
-        }
-        //let word = words[wordIndex];
-        for (let i = 0; i < word.length; i++) {
-            $("#key_"+word.charAt(i)).click();
-        }
-        $("#key_enter").click();
-    }
-  })
-  .catch(err => alert("Error loading jquery: " + err));
 }
 
 function initialize(lang) {
